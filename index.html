@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dictation App</title>
+    <link rel="stylesheet" href="/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@^0.8.0",
+          "marked": "https://esm.sh/marked@^4.0.0"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-container">
+      
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-background"></div>
+        <div class="loading-content">
+          <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <i class="fas fa-sparkles"></i>
+          </div>
+          <h2 class="loading-title">Polishing your thoughts...</h2>
+          
+          <div class="trivia-card">
+            <div class="trivia-header">
+              <i class="fas fa-lightbulb"></i>
+              <span id="triviaCategoryLabel">Daily Insight</span>
+            </div>
+            <div id="triviaText" class="trivia-text">
+              Fetching your daily dose of knowledge...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Workspace -->
+      <div class="main-content">
+        <div class="note-header">
+           <div class="editor-title" contenteditable="true" placeholder="Untitled Session">Untitled Session</div>
+        </div>
+
+        <div class="split-view">
+          <!-- Left: Raw Input (Monospace, Darker) -->
+          <div class="split-panel raw-panel">
+            <div class="panel-label">
+              <i class="fas fa-terminal"></i> Raw Transcript
+            </div>
+            <div
+              id="rawTranscription"
+              class="note-content mono-font"
+              contenteditable="true"
+              placeholder="Recording transcript..."
+            ></div>
+          </div>
+
+          <!-- Right: Polished Output (Sans-Serif, Lighter/Paper-like) -->
+          <div class="split-panel polished-panel">
+            <div class="panel-header-row">
+              <div class="panel-label">
+                <i class="fas fa-pen-fancy"></i> Polished Note
+              </div>
+              <button id="copyButton" class="copy-button" title="Copy to Clipboard">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+            <div
+              id="polishedNote"
+              class="note-content serif-font"
+              contenteditable="true"
+              placeholder="Polished result..."
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Control Island -->
+      <div class="floating-controls-container">
+        
+        <!-- Topic Selector Menu (Hidden by default) -->
+        <div id="topicMenu" class="topic-menu hidden">
+          <div class="topic-header">Select Trivia Topic</div>
+          <div class="topic-grid">
+             <button class="topic-btn active" data-topic="AI News">
+               <i class="fas fa-robot"></i> AI News
+             </button>
+             <button class="topic-btn" data-topic="Space & Science">
+               <i class="fas fa-rocket"></i> Science
+             </button>
+             <button class="topic-btn" data-topic="Tech Trends">
+               <i class="fas fa-microchip"></i> Tech
+             </button>
+             <button class="topic-btn" data-topic="History Facts">
+               <i class="fas fa-landmark"></i> History
+             </button>
+             <button class="topic-btn" data-topic="Pop Culture">
+               <i class="fas fa-film"></i> Pop Culture
+             </button>
+             <button class="topic-btn" data-topic="Coding Tips">
+               <i class="fas fa-code"></i> Coding
+             </button>
+          </div>
+        </div>
+
+        <!-- Live Visualization Layer -->
+        <div id="liveVisualizer" class="live-visualizer" style="display: none;">
+          <canvas id="liveWaveformCanvas"></canvas>
+          <div id="liveTimer" class="live-timer">00:00</div>
+        </div>
+
+        <!-- Static Controls Layer -->
+        <div class="control-bar">
+          <button class="icon-button" id="themeToggleButton" title="Toggle Theme">
+            <i class="fas fa-sun"></i>
+          </button>
+
+          <button class="icon-button" id="topicToggleButton" title="Select Trivia Topic">
+            <i class="fas fa-tags"></i>
+          </button>
+          
+          <div class="record-wrapper">
+             <button id="recordButton" class="record-button main-trigger">
+                <div class="inner-circle">
+                   <i class="fas fa-microphone"></i>
+                </div>
+                <div class="recording-ring"></div>
+             </button>
+          </div>
+
+          <button class="icon-button" id="newButton" title="Clear / New">
+            <i class="fas fa-eraser"></i>
+          </button>
+        </div>
+
+        <!-- Status Pill -->
+        <div id="statusPill" class="status-pill">Ready</div>
+      </div>
+
+    </div>
+
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
